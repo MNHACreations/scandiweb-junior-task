@@ -1,0 +1,6 @@
+{
+  "database": {
+    "initializeDatabase": false,
+    "populateData": false
+  }
+}

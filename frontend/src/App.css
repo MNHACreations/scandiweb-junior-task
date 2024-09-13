@@ -1,76 +1,63 @@
 body {
-margin: 0;
-padding: 0;
-font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
-#navbar{
+
+#navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     padding: 10px;
-    
 }
-#cart-logo{
+
+#cart-logo {
     padding: 0;
     width: 50px;
     height: 50px;
     cursor: pointer;
 }
 
-#cart-logo:hover{
-    box-shadow: inset 0 0 0 4px rgba(0,0,0, 0.1);
+#cart-logo:hover {
+    box-shadow: inset 0 0 0 4px rgba(0, 0, 0, 0.1);
     border-radius: 100%;
 }
-.navitem, .active-navitem{
+
+.navitem, .active-navitem {
     margin-top: 200px;
     color: rgba(0, 0, 0, .5);
     font-style: bold;
     text-decoration: none;
-    font-family: arial;
+    font-family: Arial;
     margin-left: 35px;
     padding: 10px;
     border-radius: 5px;
     padding-left: 20px;
     padding-right: 25px;
-
-/*    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);*/
-    
     transition: .3s ease-in;
 }
-.active-navitem{
+
+.active-navitem {
     color: rgba(0, 255, 0, .9);
     font-weight: bold;
     border-bottom: 3px solid rgba(0, 255, 0, 0.5);
 }
-.navitem:hover{
-    
-    /*box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);*/
+
+.navitem:hover {
     color: black;
-    
     border-bottom: 2px solid rgba(0, 255, 0, 0.1);
 }
 
-.products-container{
+.products-container {
     align-items: center;
     text-align: center;
     justify-content: center;
     align-self: center;
 }
 
-
-.product-image{
-    height: 310px;
-    width: 310px;
-    border-radius: 10px;
-    padding: 0;
-    transition: all 350ms ease-in;
-    -webkit-transition: all 350mx ease-in;
-}
-
-
-.product-outer{
-    margin:22px;
+.product-outer {
+    margin: 22px;
     padding: 0;
     display: inline-block;
     align-items: center;
@@ -84,66 +71,100 @@ font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     filter: drop-shadow(0px 4px 35px rgba(168, 172, 176, 0.19));
     border-radius: 10px;
 }
-.product-link{
-    text-decoration: none;
-    color: rgba(0, 0, 0, .7);
-}
-.product-outer:hover{
+
+.product-outer:hover {
     cursor: pointer;
 }
-.product-inner {
 
-     
+.product-inner {
     background-color: rgba(230, 230, 230, .4);
-    padding-bottom: 5px; 
+    padding-bottom: 5px;
     align-items: center;
     align-self: center;
     justify-content: center;
-    border-radius:10px; 
+    border-radius: 10px;
     transition: all 350ms ease-in;
-    -webkit-transition: all 350mx ease-in;
+    -webkit-transition: all 350ms ease-in;
 }
+
 .product-inner:hover {
     transition: 350ms ease-out;
     filter: drop-shadow(0px 4px 35px rgba(168, 172, 176, 1));
     background-color: rgba(200, 200, 200, .3);
-    filter:brightness(85%);
+    filter: brightness(85%);
     -webkit-filter: brightness(85%);
 }
-.product-image:hover{
+
+.product-image {
+    height: 310px;
+    width: 310px;
+    border-radius: 10px;
+    padding: 0;
+    transition: all 350ms ease-in;
+    -webkit-transition: all 350ms ease-in;
 }
-.product-meta{
+
+.product-image:hover {
+}
+
+.product-meta {
     text-align: left;
     margin-left: 20px;
 }
-.product-name{
+
+.product-link {
+    text-decoration: none;
+    color: rgba(0, 0, 0, .7);
 }
 
-.product-price{
+.product-name {
+}
+
+.product-price {
+}
+
+.productscreen-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.images-container {
+    display: flex;
+    margin-left: 50px;
+    margin-top: 50px;
+}
+
+.mini-images-container {
+    display: flex;
+    flex-direction: column;
     
 }
-.images-section {
-display: flex;
-}
-.main-image-container{
-    margin-left: 100px;
-    margin-top:100px;
-}
-.main-image{
-    width: 500px;
-}
-.preview-image-container{
-margin-left: 50px;
-margin-top: 50px;
-display: flexbox;
-width: 100px;
-}
-.preview-image{
-width: 100px;
-height: 100px;
+
+.mini-image {
+    width: 100px;
+    height: 100px;
 }
 
-.preview-image:hover{
+.mini-image:hover {
     border: 2px solid rgba(0, 0, 0, .5);
     border-radius: 10%;
 }
+
+.main-image-container {
+    margin-left: 100px;
+    margin-top: 100px;
+}
+
+.main-image {
+    width: 500px;
+    max-height: 500px;
+}
+
+.information-container {
+    display: flex;
+    
+}
+
+.information-container .product-name {
+}
+

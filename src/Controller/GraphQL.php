@@ -39,7 +39,7 @@ class GraphQL
             $attributeType = new ObjectType([
                 "name" => "Attribute",
                 "fields" => [
-                    "id" => ["type" => Type::id()],
+                    "id" => ["type" => Type::string()],
                     "displayValue" => ["type" => Type::string()],
                     "value" => ["type" => Type::string()],
                 ],
@@ -48,7 +48,7 @@ class GraphQL
             $attributeSet = new ObjectType([
                 "name" => "AttributeSet",
                 "fields" => [
-                    "id" => ["type" => Type::int()],
+                    "id" => ["type" => Type::string()],
                     "name" => ["type" => Type::string()],
                     "type" => ["type" => Type::string()],
                     "items" => ["type" => Type::listOf($attributeType)],

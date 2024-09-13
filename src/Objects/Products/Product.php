@@ -120,7 +120,7 @@ class Product implements ProductInterface {
             "gallery" => $this->gallery,
             "description" => $this->description,
             "category" => $this->category,
-            "attributes" => $this->attributes ?? $this->attributes,
+            "attributes" => $this->attributes,
             "prices" => $this->prices,
             "brand" => $this->brand,
             "__typename" => $this->type_name

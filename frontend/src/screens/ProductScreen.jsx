@@ -26,11 +26,17 @@ class ProductScreen extends React.Component {
                 symbol
             }
         }
-        gallery
         attributes{
-            id
             name
+            id
+            type
+            items{
+                displayValue
+                value
+                id
+            }
         }
+        gallery
     }
 }`
     generateAttributes = (product) => {
@@ -38,7 +44,7 @@ class ProductScreen extends React.Component {
             className={attribute.name}> {attribute.name} </div>);
     }
     getImageList = (product) => {
-        return product.gallery.map(pic => <img onMouseOver={() => {this.changeFocusedImage(pic)}} src={pic} className="preview-image"  />);
+        return product.gallery.map(pic => <img onMouseOver={() => {this.changeFocusedImage(pic)}} src={pic} className="mini-image"  />);
     }
     changeFocusedImage = (hoveredImage) => {
         this.setState(prevState => {
@@ -62,8 +68,8 @@ class ProductScreen extends React.Component {
                 if (data) {
                     const product = data.product;
                     return <div className={"productscreen-container"}> 
-                        <div className='images-section'>
-                        <div className='preview-image-container'>
+                        <div className='images-container'>
+                        <div className='mini-images-container'>
                             {this.getImageList(product)}
                         </div>
                         <div className={"main-image-container"}>
@@ -71,10 +77,10 @@ class ProductScreen extends React.Component {
                         {(this.state.focusedImage != null) ? <img className='main-image' src={this.state.focusedImage} /> : <img className="main-image" src={data.product.gallery[0]} />} 
                        </div> 
                         </div>
-                            <div className="text-section">
-                                <h1>{product.name}</h1>
-                                {this.generateAttributes()} 
-                            </div>
+                        <div className="information-container">
+                            <h1 className="product-name">{product.name}</h1>
+                            
+                        </div>
                         </div>
                 }
             }}

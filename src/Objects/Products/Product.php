@@ -1,6 +1,9 @@
 <?php
 namespace Scandiweb\Objects\Products;
 
+use Hoa\Exception\Exception;
+
+
 include_once(__DIR__ . "/ProductInterface.php");
 class Product implements ProductInterface {
 
@@ -32,6 +35,7 @@ class Product implements ProductInterface {
         $this->attributes = json_decode($db_product["attributes"]);
         $this->gallery = json_decode($db_product["gallery"]);
         $this->category = $db_product["category"];
+        
     }
 
 
@@ -116,7 +120,7 @@ class Product implements ProductInterface {
             "gallery" => $this->gallery,
             "description" => $this->description,
             "category" => $this->category,
-            "attributes" => $this->attributes,
+            "attributes" => $this->attributes ?? $this->attributes,
             "prices" => $this->prices,
             "brand" => $this->brand,
             "__typename" => $this->type_name

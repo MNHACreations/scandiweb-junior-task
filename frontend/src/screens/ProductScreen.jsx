@@ -9,7 +9,6 @@ class ProductScreen extends React.Component {
       this.state = {
         mainImage: undefined 
       }
-   console.log(props.router.params); 
   }
 
  GET_PRODUCT = gql`query($id: ID!) {
@@ -28,10 +27,18 @@ class ProductScreen extends React.Component {
             }
         }
         gallery
+        attributes{
+            id
+            name
+        }
     }
 }`
-    getImageList = (data) => {
-        return data.product.gallery.map(pic => <img onMouseOver={() => {this.changeFocusedImage(pic)}} src={pic} className="preview-image"  />);
+    generateAttributes = (product) => {
+        return product.attributes.map(attribute => <div 
+            className={attribute.name}> {attribute.name} </div>);
+    }
+    getImageList = (product) => {
+        return product.gallery.map(pic => <img onMouseOver={() => {this.changeFocusedImage(pic)}} src={pic} className="preview-image"  />);
     }
     changeFocusedImage = (hoveredImage) => {
         this.setState(prevState => {
@@ -53,16 +60,21 @@ class ProductScreen extends React.Component {
 
 
                 if (data) {
+                    const product = data.product;
                     return <div className={"productscreen-container"}> 
                         <div className='images-section'>
                         <div className='preview-image-container'>
-                            {this.getImageList(data)}
+                            {this.getImageList(product)}
                         </div>
                         <div className={"main-image-container"}>
 
                         {(this.state.focusedImage != null) ? <img className='main-image' src={this.state.focusedImage} /> : <img className="main-image" src={data.product.gallery[0]} />} 
                        </div> 
                         </div>
+                            <div className="text-section">
+                                <h1>{product.name}</h1>
+                                {this.generateAttributes()} 
+                            </div>
                         </div>
                 }
             }}

@@ -22,11 +22,9 @@ class Database extends ConfigurationManager
         define("INITIALDB", "/../Resources/initial.sql");
         define("DATAFILE", "/../Resources/data.json");
 
-        // TODO: Implement constraint check-out mechanics -Muhammad
         try {
             // Get database.initializeDatabase && database.populateData from the config.json file (At /Resources). (Used as a condition to make the DB's schema and populate the json data)
             $database_config = parent::getConfig()["database"];
-            // TODO: Release a PR Request with the modification (Why are we inverting)
             $initialize_db = $database_config["initializeDatabase"];
             $populate_data = $database_config["populateData"];
 
@@ -83,7 +81,6 @@ class Database extends ConfigurationManager
                     PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY,
                 ]);
 
-                //TODO: For god's sake (who wrote this???) | Push a PR Request using the DB check-out internal
                 $products = $json->data->products;
                 foreach ($products as $product) {
                     $products_pst->execute([

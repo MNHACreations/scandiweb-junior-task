@@ -30,7 +30,6 @@ class Entry
             $this->productService,
             $this->categoryService
         );
-        //        $data_base = new Data
 
         $dispatcher = FastRoute\simpleDispatcher(function (
             FastRoute\RouteCollector $r
@@ -41,7 +40,6 @@ class Entry
             $_SERVER["REQUEST_METHOD"],
             $_SERVER["REQUEST_URI"]
         );
-        // TODO: Seems like we're directly routing HTTP requests onto the entrypoint, please handle injections (Submit a PR request with the new code)
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
                 // ... 404 Not Found

@@ -7,7 +7,8 @@ class ProductScreen extends React.Component {
   constructor(props) {
     super(props);
       this.state = {
-        mainImage: undefined 
+        mainImage: undefined,
+        attributes: {}
       }
   }
 
@@ -41,8 +42,35 @@ class ProductScreen extends React.Component {
 }`
     generateAttributes = (product) => {
         return product.attributes.map(attribute => <div 
-            className={attribute.name}> {attribute.name} </div>);
+            key={attribute.name} className="attribute-container">
+                <h1 className="attribute-name">{attribute.name}</h1>
+                <ol className="attribute-items">
+            {this.generateAttributeItems(attribute)} 
+                </ol>
+            </div>);
     }
+    setSelectedAttribute = (attribute, selectedItem) => {
+        this.setState(prevState => {
+            return {...prevState, attributes: {
+                ...prevState.attributes,
+                [attribute.id]: selectedItem.value,
+            }
+
+            };
+        });
+    };
+    generateAttributeItems = (attribute) => {
+        return attribute.items.map(attributeItem =>
+            <div className="attribute-item-container">
+            <li id={attributeItem.id} style={{backgroundColor: (attribute.id == "Color") ? attributeItem.value : "#FFFFFF"}} 
+            className={(this.state.attributes[attribute.id] != null) ? `attribute-item ${(this.state.attributes[attribute.id] === attributeItem.value) ? `attribute-item attribute-selected ${attribute.id}` : attribute.id}` : `attribute-item ${attribute.id}`}
+            onClick={() => {this.setSelectedAttribute(attribute, attributeItem)}}
+
+            >{(attribute.id == "Color") ? "" : attributeItem.displayValue}</li> 
+
+            </div>);
+    }; 
+
     getImageList = (product) => {
         return product.gallery.map(pic => <img onMouseOver={() => {this.changeFocusedImage(pic)}} src={pic} className="mini-image"  />);
     }
@@ -79,7 +107,8 @@ class ProductScreen extends React.Component {
                         </div>
                         <div className="information-container">
                             <h1 className="product-name">{product.name}</h1>
-                            
+                            {this.generateAttributes(product)}
+                            <button className='product-buy-button'>Buy</button>
                         </div>
                         </div>
                 }

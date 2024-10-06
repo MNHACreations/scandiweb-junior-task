@@ -12,7 +12,7 @@ body {
     padding: 10px;
 }
 
-#cart-logo {
+#navbar-cart-logo {
     padding: 0;
     width: 50px;
     height: 50px;
@@ -23,6 +23,28 @@ body {
     box-shadow: inset 0 0 0 4px rgba(0, 0, 0, 0.1);
     border-radius: 100%;
 }
+
+.navbar-cart-logo{
+}
+.navbar-cart-size{
+    border: 2px solid black;
+    width: 13px;
+    height: 17px;
+    padding: 4px;
+    padding-inline: 8px;
+    border-radius: 100%;
+
+    background-color: rgba(0, 0, 0, .8);
+    color: rgba(255, 255, 255, .9);
+    font-weight: bolder;
+    position: absolute;
+    right: 1px;
+
+    text-align: center;
+    margin-right: 20px;
+    align-content: center;
+}
+
 
 .navitem, .active-navitem {
     margin-top: 200px;
@@ -266,4 +288,8 @@ justify-self: center;
 
 filter: invert();
 }
+
+
+
+
 

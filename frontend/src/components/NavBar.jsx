@@ -11,6 +11,12 @@ const GET_CATEGORIES = gql`query {
 
 
 export default class NavBar extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {cartSize: 0};
+        this.cartUpdateInterval = React.createRef();
+
+    }
 getUniqueCategories(data) {
     let uniqueCategories = [];
 
@@ -28,6 +34,14 @@ getUniqueCategories(data) {
     )
 }
 
+componentWillUnmount(){
+    clearInterval(this.cartUpdateInterval.current);
+};
+componentDidMount(){    
+        this.cartUpdateInterval.current = setInterval(() => {
+           this.setState({cartSize: this.props.cartRef.current.getCartSize()}); 
+        }, 50);
+}
     render(){
         return (
 
@@ -40,18 +54,18 @@ getUniqueCategories(data) {
                 if (error) {
                     return <p>Error {error.graphQLErrors[0].message}</p>
                 }
-
                 if (data) {
-
-
-                        return <div id="navbar">
+                        return <div id="navbar" className='z-40'>
                             <div className="navbar-content">
                                 {this.getUniqueCategories(data)}
 
 
                                 
                             </div>
-                            <img src={cartLogo} id="cart-logo" />
+                            <div className='navbar-cart-container' onClick={() => {this.props.cartRef.current.toggleCart()}}>
+                        <img src={cartLogo} id="navbar-cart-logo" />
+                        <span style={{display: (this.state.cartSize < 1) ? "none" : "inline"}} className="navbar-cart-size">{this.state.cartSize}</span>
+                        </div>
                         </div>
 
 

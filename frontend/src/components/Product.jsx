@@ -33,12 +33,15 @@ export default class Product extends React.Component {
             <div className="product-meta">
             <p className="product-name">{this.state.name}</p>
             <p className="product-price">{this.state.currency.symbol}{this.state.price.amount}</p>
+
+          </div>
+
+          </div>
+          </Link>
+
             <button className="product-add-button" onClick={() => {this.props.onProductAdd(this.state)}}>
             <img className="product-add-cart-image" src={cartLogo} />
           </button>
-          </div>
-          </div>
-          </Link>
         </div>;
   }
 }

@@ -40,15 +40,41 @@ class ProductScreen extends React.Component {
         gallery
     }
 }`
-    generateAttributes = (product) => {
+    generateAttributes = (product, interactive) => {
         return product.attributes.map(attribute => <div 
-            key={attribute.name} className="attribute-container">
+            key={attribute.name} className="attribute-container hover:cursor-default">
                 <h1 className="attribute-name">{attribute.name}</h1>
-                <ol className="attribute-items">
-            {this.generateAttributeItems(attribute)} 
-                </ol>
+                <div className="flex flex-row">
+            {this.generateAttributeItems(attribute, interactive)} 
+                </div>
             </div>);
     }
+generateAttributeItems = (attribute, interactive) => {
+    // Set the default active item to the first in every attribute
+    let result = [];
+    attribute.items.forEach(attributeItem => {
+        const stateAttribute = this.state.attributes[attribute.id];
+       const isActive = (stateAttribute !== null) && (stateAttribute === attributeItem.value);
+
+
+result.push(<div 
+        key={attributeItem.id}
+        className={`${
+    (isActive && attributeItem.value[0] == '#') &&
+    'border-solid border-green-500'}  box-border  mx-3 my-2 p-0.5`}>
+        <div
+        style={{backgroundColor: (attributeItem.value[0] === '#') && attributeItem.value}} 
+        className={`border-solid border-gray-700  p-2 
+            ${(isActive) && 'bg-black text-white'}`} 
+        onClick={ () => {interactive && this.setSelectedAttribute(attribute, attributeItem)} }  
+        > {(attributeItem.value[0] != '#') && attributeItem.value} </div>   
+    
+       </div> );
+        
+    })
+
+    return result;
+}; 
     setSelectedAttribute = (attribute, selectedItem) => {
         this.setState(prevState => {
             return {...prevState, attributes: {
@@ -59,17 +85,6 @@ class ProductScreen extends React.Component {
             };
         });
     };
-    generateAttributeItems = (attribute) => {
-        return attribute.items.map(attributeItem =>
-            <div className="attribute-item-container">
-            <li id={attributeItem.id} style={{backgroundColor: (attribute.id == "Color") ? attributeItem.value : "#FFFFFF"}} 
-            className={(this.state.attributes[attribute.id] != null) ? `attribute-item ${(this.state.attributes[attribute.id] === attributeItem.value) ? `attribute-item attribute-selected ${attribute.id}` : attribute.id}` : `attribute-item ${attribute.id}`}
-            onClick={() => {this.setSelectedAttribute(attribute, attributeItem)}}
-
-            >{(attribute.id == "Color") ? "" : attributeItem.displayValue}</li> 
-
-            </div>);
-    }; 
 
     getImageList = (product) => {
         return product.gallery.map(pic => <img onMouseOver={() => {this.changeFocusedImage(pic)}} src={pic} className="mini-image"  />);
@@ -95,6 +110,8 @@ class ProductScreen extends React.Component {
 
                 if (data) {
                     const product = data.product;
+                    const attributes = this.generateAttributes(product, true);
+                    const cartAttributes = this.generateAttributes(product, false);
                     return <div className={"productscreen-container"}> 
                         <div className='images-container'>
                         <div className='mini-images-container'>
@@ -107,8 +124,9 @@ class ProductScreen extends React.Component {
                         </div>
                         <div className="information-container">
                             <h1 className="product-name">{product.name}</h1>
-                            {this.generateAttributes(product)}
-                            <button className='product-buy-button'>Buy</button>
+                            {attributes}
+                            <button onClick={() => {this.props.cartRef.current.addProduct({...product, attributes: cartAttributes, selectedAttributes: this.state.attributes})}
+                            } className='product-buy-button'>Buy</button>
                         </div>
                         </div>
                 }

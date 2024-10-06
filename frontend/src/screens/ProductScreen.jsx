@@ -125,7 +125,7 @@ result.push(<div
                         <div className="information-container">
                             <h1 className="product-name">{product.name}</h1>
                             {attributes}
-                            <button onClick={() => {this.props.cartRef.current.addProduct({...product, attributes: cartAttributes, selectedAttributes: this.state.attributes})}
+                            <button onClick={() => {this.props.cartRef.current.addProduct({...product, attributes: product.attributes, selectedAttributes: this.state.attributes})}
                             } className='product-buy-button'>Buy</button>
                         </div>
                         </div>

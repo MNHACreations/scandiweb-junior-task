@@ -5,45 +5,58 @@ import Cart from './Cart'
 import { Link } from "react-router-dom";
 // TODO: Add data fields && classes/ids
 export default class Product extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      id: props.productJson.id,
-      product_id: props.productJson.product_id,
-      name: props.productJson.name,
-      instock: props.productJson.instock,
-      gallery: props.productJson.gallery,
-      description: props.productJson.description,
-      category: props.productJson.category,
-      attributes: props.productJson.attributes,
-      prices: props.productJson.prices,
-      price: props.productJson.prices[0],  
-      brand: props.productJson.brand,
-      currency: props.productJson.prices[0].currency
-    };
-  }
-  render() {
-      console.log("New product! the name... is the " + this.state.name);
-      console.log("Prices: " + this.state.prices[0].amount);
+    constructor(props) {
+        super(props);
+        this.state = {
+            id: props.productJson.id,
+            product_id: props.productJson.product_id,
+            name: props.productJson.name,
+            instock: props.productJson.instock,
+            gallery: props.productJson.gallery,
+            description: props.productJson.description,
+            category: props.productJson.category,
+            attributes: props.productJson.attributes,
+            prices: props.productJson.prices,
+            price: props.productJson.prices[0],  
+            brand: props.productJson.brand,
+            currency: props.productJson.prices[0].currency,
+            selectedAttributes: this.getDefault(props.productJson.attributes),
+        };
+    }
 
-      return<div className="product-outer"> 
-          <Link to={`/product/${this.state.id}`} className="product-link">
-          <div onClick={this.productRoute} className="product-inner">
+    getDefault = (attrs) => {
+        const defaultSelectedAttributes = {};
+        const currentAvailableAttributes = Object.values(attrs);
+
+
+        currentAvailableAttributes.forEach(attributeSet => {
+            const firstAttributeItem = attributeSet.items[0];
+            defaultSelectedAttributes[attributeSet.id] =  firstAttributeItem.value;
+
+        })
+
+
+        return defaultSelectedAttributes;
+    }
+    render() {
+        return<div className="product-outer"> 
+            <Link to={`/product/${this.state.id}`} className="product-link">
+            <div onClick={this.productRoute} className="product-inner">
             <img className="product-image" src={this.state.gallery[0]}></img>
             <div className="product-meta">
             <p className="product-name">{this.state.name}</p>
             <p className="product-price">{this.state.currency.symbol}{this.state.price.amount}</p>
 
-          </div>
+            </div>
 
-          </div>
-          </Link>
+            </div>
+            </Link>
 
             <button className="product-add-button" onClick={() => {this.props.onProductAdd(this.state)}}>
             <img className="product-add-cart-image" src={cartLogo} />
-          </button>
-        </div>;
-  }
+            </button>
+            </div>;
+    }
 }
 
 Product.propTypes = {

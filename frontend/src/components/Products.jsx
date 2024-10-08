@@ -39,6 +39,16 @@ export default class Products extends React.PureComponent {
             }
         }
         gallery
+        attributes{
+            name
+            id
+            type
+            items{
+                displayValue
+                value
+                id
+            }
+        }
     }
 }`
 

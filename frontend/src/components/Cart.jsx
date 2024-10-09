@@ -70,7 +70,7 @@ class Cart extends React.Component {
 
     generateAttributes = (product) => {
         return product.attributes.map(attribute => (
-            <div key={attribute.name} className="hover:cursor-default">
+            <div key={attribute.name} data-testid={`cart-item-attribute-${this.toKebabCase(attribute.name)}`} className="hover:cursor-default">
                 <h1 className="attribute-name">{attribute.name}</h1>
                 <div className="flex flex-row">
                     {this.generateAttributeItems(attribute, product.selectedAttributes)}
@@ -78,7 +78,9 @@ class Cart extends React.Component {
             </div>
         ));
     };
-
+    toKebabCase = (string) => {
+        return string.toLowerCase().replaceAll(" ", "-");
+    }
     generateAttributeItems = (attribute, selectedAttributes) => {
         return attribute.items.map(attributeItem => {
             const isActive = selectedAttributes[attribute.name] === attributeItem.value;
@@ -88,7 +90,7 @@ class Cart extends React.Component {
                     className={`${
                         isActive && attributeItem.value[0] === '#' ? 'border-solid border-green-500' : ''
                     } box-border mr-1 my-1.5 p-0.5`}
-                >
+                data-testid={this.toKebabCase(`cart-item-attribute-${attribute.name}-${attributeItem.value}${(isActive) ? '-selected' : ''}`)}  >
                     <div
                         style={{ backgroundColor: attributeItem.value[0] === '#' && attributeItem.value }}
                         className={`border-solid border-gray-700 pr-2 pl-2 p-1 ${
@@ -117,7 +119,7 @@ class Cart extends React.Component {
                     >
                         <div className="flex text-xs font-sans">
                             <h1>My bag,</h1>
-                            <p className="flex items-center font-bold ml-2">
+                            <p  data-testid='cart-item-amount'  className="flex items-center font-bold ml-2">
                                 {this.getCartSize()} items
                             </p>
                         </div>
@@ -136,6 +138,7 @@ class Cart extends React.Component {
                                     <button
                                         onClick={() => this.changeAmount(cartItem, 1)}
                                         className="transition-all z-50 border-double p-2 pr-3 pl-3 bg-transparent hover:bg-black hover:text-white"
+                            data-testid='cart-item-amount-increase'
                                     >
                                         +
                                     </button>
@@ -143,6 +146,7 @@ class Cart extends React.Component {
                                     <button
                                         onClick={() => this.changeAmount(cartItem, -1)}
                                         className="transition-all z-50 border-double p-2 pr-3 pl-3 bg-transparent hover:bg-black hover:text-white"
+                                        data-testid='cart-item-amount-decrease'
                                     >
                                         -
                                     </button>

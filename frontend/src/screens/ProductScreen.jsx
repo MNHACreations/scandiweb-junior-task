@@ -4,77 +4,77 @@ import PropTypes from 'prop-types'
 import {gql} from '@apollo/client'
 import { Query } from '@apollo/client/react/components'
 class ProductScreen extends React.Component {
-  constructor(props) {
-    super(props);
-      this.state = {
-        mainImage: undefined,
-        attributes: {}
-      }
-  }
-
- GET_PRODUCT = gql`query($id: ID!) {
-    product(id: $id) {
-        id 
-        name 
-        description 
-        instock
-        category 
-        brand
-        prices{
-            amount
-            currency{
-                label
-                symbol
-            }
+    constructor(props) {
+        super(props);
+        this.state = {
+            mainImage: undefined,
+            attributes: {}
         }
-        attributes{
-            name
-            id
-            type
-            items{
-                displayValue
-                value
-                id
-            }
-        }
-        gallery
     }
-}`
-    generateAttributes = (product, interactive) => {
+
+    GET_PRODUCT = gql`query($id: ID!) {
+        product(id: $id) {
+            id 
+            name 
+            description 
+            instock
+            category 
+            brand
+            prices{
+                amount
+                currency{
+                    label
+                    symbol
+                }
+            }
+            attributes{
+                name
+                id
+                type
+                items{
+                    displayValue
+                    value
+                    id
+                }
+            }
+            gallery
+        }
+    }`
+    generateAttributes = (product) => {
         return product.attributes.map(attribute => <div 
-            key={attribute.name} className="attribute-container hover:cursor-default">
-                <h1 className="attribute-name">{attribute.name}</h1>
-                <div className="flex flex-row">
-            {this.generateAttributeItems(attribute, interactive)} 
-                </div>
+            key={attribute.name} className="attribute-container hover:cursor-default" data-testid={`product-attribute-${this.toKebabCase(attribute.name)}`}    >
+            <h1 className="attribute-name">{attribute.name}</h1>
+            <div className="flex flex-row">
+            {this.generateAttributeItems(attribute)} 
+            </div>
             </div>);
     }
-generateAttributeItems = (attribute, interactive) => {
-    // Set the default active item to the first in every attribute
-    let result = [];
-    attribute.items.forEach(attributeItem => {
-        const stateAttribute = this.state.attributes[attribute.id];
-       const isActive = (stateAttribute !== null) && (stateAttribute === attributeItem.value);
+    generateAttributeItems = (attribute) => {
+        // Set the default active item to the first in every attribute
+        let result = [];
+        attribute.items.forEach(attributeItem => {
+            const stateAttribute = this.state.attributes[attribute.id];
+            const isActive = (stateAttribute !== null) && (stateAttribute === attributeItem.value);
 
 
-result.push(<div 
-        key={attributeItem.id}
-        className={`${
-    (isActive && attributeItem.value[0] == '#') &&
-    'border-solid border-green-500'}  box-border  mx-3 my-2 p-0.5`}>
-        <div
-        style={{backgroundColor: (attributeItem.value[0] === '#') && attributeItem.value}} 
-        className={`border-solid border-gray-700  p-2 
-            ${(isActive) && 'bg-black text-white'}`} 
-        onClick={ () => {interactive && this.setSelectedAttribute(attribute, attributeItem)} }  
-        > {(attributeItem.value[0] != '#') && attributeItem.value} </div>   
-    
-       </div> );
-        
-    })
+            result.push(<div 
+                key={attributeItem.id}
+                className={`${
+                    (isActive && attributeItem.value[0] == '#') &&
+                        'border-solid border-green-500'}  box-border  mx-3 my-2 p-0.5`}>
+                <div
+                style={{backgroundColor: (attributeItem.value[0] === '#') && attributeItem.value}} 
+                className={`border-solid border-gray-700  p-2 
+                    ${(isActive) && 'bg-black text-white'}`} 
+                onClick={ () => {this.setSelectedAttribute(attribute, attributeItem)} }  
+                > {(attributeItem.value[0] != '#') && attributeItem.value} </div>   
 
-    return result;
-}; 
+                </div> );
+
+        })
+
+        return result;
+    }; 
     setSelectedAttribute = (attribute, selectedItem) => {
         this.setState(prevState => {
             return {...prevState, attributes: {
@@ -86,6 +86,9 @@ result.push(<div
         });
     };
 
+    toKebabCase = (string) => {
+        return string.toLowerCase().replaceAll(" ", "-");
+    }
     getImageList = (product) => {
         return product.gallery.map(pic => <img onMouseOver={() => {this.changeFocusedImage(pic)}} src={pic} className="mini-image"  />);
     }
@@ -99,34 +102,33 @@ result.push(<div
             <Query query={this.GET_PRODUCT} variables={{id: this.props.router.params.id}}>
             { ({loading, error, data}) => {
 
-           if (loading) {
-                return <p>Loading...</p>
-           }
+                if (loading) {
+                    return <p>Loading...</p>
+                }
 
-            if (error) {
-                return <h1>Error {error.message}</h1>
-            }
+                if (error) {
+                    return <h1>Error {error.message}</h1>
+                }
 
 
                 if (data) {
                     const product = data.product;
-                    const attributes = this.generateAttributes(product, true);
-                    const cartAttributes = this.generateAttributes(product, false);
+                    const attributes = this.generateAttributes(product);
                     return <div className={"productscreen-container"}> 
-                        <div className='images-container'>
+                        <div className='images-container'  data-testid='product-gallery'   >
                         <div className='mini-images-container'>
-                            {this.getImageList(product)}
+                        {this.getImageList(product)}
                         </div>
                         <div className={"main-image-container"}>
 
                         {(this.state.focusedImage != null) ? <img className='main-image' src={this.state.focusedImage} /> : <img className="main-image" src={data.product.gallery[0]} />} 
-                       </div> 
+                        </div> 
                         </div>
                         <div className="information-container">
-                            <h1 className="product-name">{product.name}</h1>
-                            {attributes}
-                            <button onClick={() => {this.props.cartRef.current.addProduct({...product, attributes: product.attributes, selectedAttributes: this.state.attributes})}
-                            } className='product-buy-button'>Buy</button>
+                        <h1 className="product-name">{product.name}</h1>
+                        {attributes}
+                        <button onClick={() => {this.props.cartRef.current.addProduct({...product, attributes: product.attributes, selectedAttributes: this.state.attributes})}
+                        }   data-testid='add-to-cart'  className='product-buy-button'>Buy</button>
                         </div>
                         </div>
                 }

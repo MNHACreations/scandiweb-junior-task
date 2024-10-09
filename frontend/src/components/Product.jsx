@@ -38,8 +38,12 @@ export default class Product extends React.Component {
 
         return defaultSelectedAttributes;
     }
+
+    toKebabCase = (string) => {
+        return string.toLowerCase().replaceAll(" ", "-");
+    }
     render() {
-        return<div className="product-outer"> 
+        return<div className="product-outer"  data-testid={`product-${this.toKebabCase(this.state.name)}`}> 
             <Link to={`/product/${this.state.id}`} className="product-link">
             <div onClick={this.productRoute} className="product-inner">
             <img className="product-image" src={this.state.gallery[0]}></img>

@@ -158,7 +158,7 @@ class ProductScreen extends React.Component {
                         {this.getPrice(product)}
 
                         <button onClick={() => {this.props.cartRef.current.addProduct({...product, attributes: product.attributes, selectedAttributes: this.state.attributes})}
-                        }   data-testid='add-to-cart'  className='p-4 bg-green-400 border border-transparent text-white font-bold'>ADD TO CART</button>
+                        }   data-testid='add-to-cart'  className='p-4 bg-green-400 border border-transparent text-white font-bold transition-all hover:bg-green-500 active:bg-green-600'>ADD TO CART</button>
 
                         {parse(product.description.replace("<p>", "<p className=' font-roboto text-scandiweb-black '>"))}
                         </div>

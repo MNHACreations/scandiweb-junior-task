@@ -14,12 +14,12 @@ export default class Products extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.setState({category: this.props.category});
+        this.setState({ category: this.props.category });
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.category != this.props.category) {
-            this.setState({category: prevProps.category});
+            this.setState({ category: prevProps.category });
         }
     }
 
@@ -58,29 +58,39 @@ export default class Products extends React.PureComponent {
         return string.toLowerCase().replaceAll(" ", "-");
     }
     getProducts(data) {
-        return data.products.map(product => <Product key={product.id} productJson={product} onProductAdd={this.props.onProductAdd} />); 
-    } 
+        return data.products.map(product => <Product key={product.id} productJson={product} onProductAdd={this.props.onProductAdd} />);
+    }
+    capitalize = (string) => {
+        let capitalized = string[0].toUpperCase();
+        return capitalized + String(string).replace(String(string).at(0), '');
+    }
     render() {
         return (
 
-            <Query query={this.GET_PRODUCTS} variables={{category: this.props.category}}>
-            {({loading, error, data}) => {
-                if (loading) {
-                    return <p>Loading...</p>
-                }
+            <Query query={this.GET_PRODUCTS} variables={{ category: this.props.category }}>
+                {({ loading, error, data }) => {
+                    if (loading) {
+                        return <p>Loading...</p>
+                    }
 
-                if (error) {
-                    return <p>Error {error.graphQLErrors[0].message}</p>
-                }
+                    if (error) {
+                        return <p>Error {error.graphQLErrors[0].message}</p>
+                    }
 
-                if (data) {
-                    return <div id="products-container">{this.getProducts(data)} </div>
-
-
+                    if (data) {
+                        return <div>
 
 
-                }
-            }}
+                            <h1 className="absolute top-24 left-24 font-raleway font-normal"> {this.capitalize(this.props.category)}</h1>
+                            <div id="products-container" className="flex flex-wrap mt-40">
+
+                                {this.getProducts(data)} </div>
+                        </div>
+
+
+
+                    }
+                }}
             </Query>
 
         )

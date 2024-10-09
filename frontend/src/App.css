@@ -53,7 +53,6 @@ body {
     font-family: Arial;
     margin-left: 35px;
     padding: 10px;
-    border-radius: 5px;
     padding-left: 20px;
     padding-right: 25px;
     transition: .3s ease-in;
@@ -71,22 +70,16 @@ body {
 }
 
 .products-container {
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    align-self: center;
 }
 
 .product-outer {
     margin: 22px;
     padding: 0;
-    display: inline-block;
     align-items: center;
     justify-content: center;
     text-align: center;
     width: 315px;
     height: 315px;
-    margin-left: 15rem;
     margin-bottom: 10rem;
     background-color: rgba(230, 230, 230, .4);
     filter: drop-shadow(0px 4px 35px rgba(168, 172, 176, 0.19));

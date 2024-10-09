@@ -126,7 +126,7 @@ class Cart extends React.Component {
                         {this.getCartItems().map(cartItem => (
                             <div key={cartItem.id} className="z-50 transition-all flex font-sans">
                                 <div className="flex flex-col text-xs max-w-40">
-                                    <h1 className="text-base">{cartItem.name}</h1>
+                                    <h1 className="text-base font-raleway mr-2">{cartItem.name}</h1>
                                     <p className="font-bold font-mono text-base">
                                         {cartItem.prices[0].currency.symbol}{cartItem.prices[0].amount}
                                     </p>
@@ -134,20 +134,18 @@ class Cart extends React.Component {
                                         {this.generateAttributes(cartItem)}
                                     </div>
                                 </div>
-                                <div className="flex flex-col">
+                                <div className="flex flex-col h-36">
                                     <button
                                         onClick={() => this.changeAmount(cartItem, 1)}
-                                        className="transition-all z-50 border-double p-2 pr-3 pl-3 bg-transparent hover:bg-black hover:text-white"
-                            data-testid='cart-item-amount-increase'
-                                    >
+                                        className="transition-all z-50 border-solid p-2 pr-3 pl-3 bg-transparent hover:bg-black hover:text-white"
+                            data-testid='cart-item-amount-increase'>
                                         +
                                     </button>
-                                    <span className="mt-2.5 mb-2.5 text-center">{cartItem.amount}</span>
+                                    <span className="mt-7 mb-7 text-center">{cartItem.amount}</span>
                                     <button
                                         onClick={() => this.changeAmount(cartItem, -1)}
-                                        className="transition-all z-50 border-double p-2 pr-3 pl-3 bg-transparent hover:bg-black hover:text-white"
-                                        data-testid='cart-item-amount-decrease'
-                                    >
+                                        className="transition-all z-50 border-solid p-2 pr-3 pl-3 bg-transparent hover:bg-black hover:text-white"
+                                        data-testid='cart-item-amount-decrease'>
                                         -
                                     </button>
                                 </div>

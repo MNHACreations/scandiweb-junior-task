@@ -1,4 +1,3 @@
-import { defaults } from 'autoprefixer';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -7,7 +6,18 @@ export default {
   },
   content: ['./src/**/*.{html,js,jsx}'],
   theme: {
-    extend: {},
+    extend: {
+        colors: {
+            scandiweb: {
+                black: "#1D1F22",
+                lightgreen: "#5ECE7B"
+            }        
+        },
+        fontFamily: {
+            raleway: ["Raleway", "Roboto", "sans-serif"],
+            roboto: ["Roboto", "sans-serif"]
+        }
+    },
      
 
   },

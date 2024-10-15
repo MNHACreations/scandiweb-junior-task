@@ -82,7 +82,7 @@ export default class Products extends React.PureComponent {
 
 
                             <h1 className="absolute top-24 left-24 font-raleway font-normal"> {this.capitalize(this.props.category)}</h1>
-                            <div id="products-container" className="flex flex-wrap mt-40">
+                            <div id="products-container" className="flex flex-wrap justify-evenly gap-16 mt-40">
 
                                 {this.getProducts(data)} </div>
                         </div>

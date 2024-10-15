@@ -6,8 +6,8 @@ class Cart extends React.Component {
         super(props);
         this.state = {
             cartSize: 0,
-            cartItems: [],
-            cartMenuState: false,
+            cartItems: JSON.parse(localStorage.getItem("cartItems")) || [],
+            cartMenuState: true
         };
     }
 
@@ -61,9 +61,12 @@ class Cart extends React.Component {
             const productIndex = updatedCartItems.indexOf(product);
             const newAmount = product.amount + amount;
 
-            if (newAmount >= 0) {
+            if (newAmount > 0) {
                 updatedCartItems[productIndex] = { ...product, amount: newAmount };
                 return { cartItems: updatedCartItems };
+            } else {
+                    updatedCartItems.splice(productIndex, 1);
+                return { cartItems: updatedCartItems }
             }
         });
     };
@@ -103,7 +106,23 @@ class Cart extends React.Component {
             );
         });
     };
+    
+    componentDidUpdate()  {
+        localStorage.setItem("cartItems", JSON.stringify(this.state.cartItems));
+        console.log("SAVING")
+    };
+    getTotalPrice = () => {
+        // TODO: Handle this in a better way
+        let lastDetectedCurrencySymbol = "$"; // Defaulting to dollars
+        let price = 0;
+        this.state.cartItems.forEach(cartItem => {
+            const cartItemPrice = cartItem.prices[0].amount * cartItem.amount;
+            price+=cartItemPrice;
+            lastDetectedCurrencySymbol = cartItem.prices[0].currency.symbol;
+        })
 
+        return lastDetectedCurrencySymbol +  Math.round(price);
+    }
     render() {
         const { cartMenuState } = this.state;
         return (
@@ -149,9 +168,13 @@ class Cart extends React.Component {
                                         -
                                     </button>
                                 </div>
-                                <img className="max-w-32 max-h-52" src={cartItem.gallery[0]} alt={cartItem.name} />
+                                <img className="max-w-32 max-h-40" src={cartItem.gallery[0]} alt={cartItem.name} />
                             </div>
                         ))}
+                        <div className='flex flex-row justify-between'>
+                        <h2 className='font-sans'>Total: </h2>
+                        <span className='self-center font-raleway font-bold text-center' data-testid='cart-total' >{this.getTotalPrice()}</span>
+                </div>
                     </div>
                 </div>
             ) : null

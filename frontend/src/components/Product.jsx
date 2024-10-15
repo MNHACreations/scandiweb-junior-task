@@ -43,21 +43,22 @@ export default class Product extends React.Component {
         return string.toLowerCase().replaceAll(" ", "-");
     }
     render() {
-        return<div className="product-outer"  data-testid={`product-${this.toKebabCase(this.state.name)}`}> 
+        return <div   data-testid={`product-${this.toKebabCase(this.state.name)}`} onClick={this.productRoute} 
+        className="  pb-[5px] items-center self-center justify-center  transition-all duration-[350ms] ease-in
+            hover:transition-all hover:drop-shadow-md group 
+            w-[18rem] h-[23rem] flex flex-col hover:bg-white hover:shadow-white">
             <Link to={`/product/${this.state.id}`} className="product-link">
-            <div onClick={this.productRoute} className="product-inner">
-            <img className="product-image" src={this.state.gallery[0]}></img>
+            <img className="w-64 max-h-64 " src={this.state.gallery[0]}></img>
             <div className="product-meta">
-            <p className="product-name">{this.state.name}</p>
-            <p className="product-price">{this.state.currency.symbol}{this.state.price.amount}</p>
-
-            </div>
+            <p className="product-name font-roboto font-normal">{this.state.name}</p>
+            <p className="product-price font-raleway font-extrabold">{this.state.currency.symbol}{this.state.price.amount}</p>
 
             </div>
             </Link>
 
-            <button className="product-add-button" onClick={() => {this.props.onProductAdd(this.state)}}>
-            <img className="product-add-cart-image" src={cartLogo} />
+
+            <button className="flex hidden transition-all active:bg-green-600  border-transparent absolute bottom-16 right-5 hover:bg-green-500  rounded-full w-14 h-14 bg-green-400  justify-center items-center group-hover:flex" onClick={() => {this.props.onProductAdd(this.state)}}>
+            <img className="w-10 h-10 filter: invert" src={cartLogo} />
             </button>
             </div>;
     }

@@ -8,7 +8,7 @@ class ProductScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mainImage: undefined,
+            mainImage: 0,
             attributes: {}
         }
     }
@@ -50,6 +50,8 @@ class ProductScreen extends React.Component {
             </div>
             </div>);
     }
+
+
     generateAttributeItems = (attribute) => {
         // Set the default active item to the first in every attribute
         let result = [];
@@ -57,20 +59,20 @@ class ProductScreen extends React.Component {
             const stateAttribute = this.state.attributes[attribute.id];
             const isActive = (stateAttribute !== null) && (stateAttribute === attributeItem.value);
             const isColor = attribute.name === "Color" || attributeItem.value[0] === '#';
-
+            const color = attributeItem.value;
             result.push(
                 <div key={attributeItem.id} className='flex'>
 
-                <div className={(isColor && isActive) && 'border-solid rounded-sm absolute  w-[3.5rem] h-[3.5rem]   border-green-400 mx-2 '}></div>
+
                 
-                <div style={{backgroundColor: (isColor) && attributeItem.value}} 
+                
+                <div style={{backgroundColor: (isColor) && attributeItem.value}}
                 className={`
-                    ${(isColor) && 'w-[2.25rem] h-[2.25rem] border-none'}  
+                    ${(isColor) && `w-[2.25rem] h-[2.25rem] ${(isActive) ? `border-solid border-emerald-400 border-s-8 ` : 'border-solid border-black'}`}  
                     border-[2px] mx-2 font-roboto transition-all font-bold rounded-sm border-solid border-gray-700  p-2 
                     ${(isActive) && 'bg-black text-white'}`} 
                 onClick={ () => {this.setSelectedAttribute(attribute, attributeItem)} }  
-                > {(!isColor) && attributeItem.value} </div>   
-
+                > {(!isColor) && attributeItem.value} </div>
                 </div> );
 
         })
@@ -107,11 +109,16 @@ class ProductScreen extends React.Component {
         return string.toLowerCase().replaceAll(" ", "-");
     }
     getImageList = (product) => {
-        return product.gallery.map(pic => <img onMouseOver={() => {this.changeFocusedImage(pic)}} src={pic} className="mini-image"  />);
+        let result = [];
+        for (let i = 0; i < product.gallery.length; i++) {
+           const pic = product.gallery[i];
+            result.push(<img onMouseOver={() => {this.changeFocusedImage(i)}} src={pic} className='mini-image' />)
+        }
+        return result;
     }
-    changeFocusedImage = (hoveredImage) => {
+    changeFocusedImage = (hoveredImageIndex) => {
         this.setState(prevState => {
-            return ({...prevState, focusedImage: hoveredImage})
+            return ({...prevState, mainImage: hoveredImageIndex})
         });
     } 
     getPrice = (product) => {
@@ -123,6 +130,8 @@ class ProductScreen extends React.Component {
 
         return <span>Price unavailable</span>;
     }
+
+    
     render() {
         return (
             <Query query={this.GET_PRODUCT} variables={{id: this.props.router.params.id}}>
@@ -145,12 +154,22 @@ class ProductScreen extends React.Component {
                         <div className='mini-images-container'>
                         {this.getImageList(product)}
                         </div>
-                        <div className={"main-image-container"}>
+                        <div className={"main-image-container flex flex-row"}>
 
-                        {(this.state.focusedImage != null) ? <img className='main-image' src={this.state.focusedImage} /> : <img className="main-image" src={data.product.gallery[0]} />} 
+                        <button className='h-10 w-10 relative left-10 top-56 bg-[rgba(0,0,0,0.5)] border-transparent text-white font-extrabold'
+                    onClick={() => {this.changeFocusedImage(((this.state.mainImage - 1) !== -1) ? this.state.mainImage - 1 : this.state.mainImage)}}
+                        >⇦</button>
+                        
+                             <img className='main-image' src={product.gallery[this.state.mainImage]} />
+                            
+                            
+                         
+                        <button className='h-10 w-10 relative right-10 top-56 bg-[rgba(0,0,0,0.5)] border-transparent text-white font-extrabold'
+                        onClick={() => {this.changeFocusedImage(((this.state.mainImage + 1) !== product.gallery.length) ? this.state.mainImage + 1 : this.state.mainImage)} }
+                        >⇨</button>
                         </div> 
                         </div>
-                        <div className="information-container">
+                        <div className="flex flex-col mt-40 mr-52">
                         <h1 className="product-name">{product.name}</h1>
                         {attributes}
 
@@ -158,9 +177,9 @@ class ProductScreen extends React.Component {
                         {this.getPrice(product)}
 
                         <button onClick={() => {this.props.cartRef.current.addProduct({...product, attributes: product.attributes, selectedAttributes: this.state.attributes})}
-                        }   data-testid='add-to-cart'  className='p-4 bg-green-400 border border-transparent text-white font-bold transition-all hover:bg-green-500 active:bg-green-600'>ADD TO CART</button>
+                        }   data-testid='add-to-cart'  className='p-4 bg-green-400 border border-transparent text-white font-bold transition-all w-96 hover:bg-green-500 active:bg-green-600'>ADD TO CART</button>
 
-                        {parse(product.description.replace("<p>", "<p className=' font-roboto text-scandiweb-black '>"))}
+                        {parse(product.description.replace("<p>", "<p data-testid='product-description'   className=' font-roboto text-scandiweb-black '>"))}
                         </div>
                         </div>
                 }

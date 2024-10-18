@@ -3,7 +3,7 @@ namespace Scandiweb\Services;
 
 use Scandiweb\Objects\Products\Product;
 use Scandiweb\Repository\DBQueryBuilder;
-// Fixed, TODO: Merge to main.
+
 class ProductService
 {
     private DBQueryBuilder $dbQueryBuilder;
@@ -30,5 +30,10 @@ class ProductService
         $db_product = $this->dbQueryBuilder->select_one("products", $id);
         return new Product($db_product);
     }
-
+    
+    /* @return bool */
+    public function insert_order(string $values): bool {
+        
+       return $this->dbQueryBuilder->insert_one("orders", $values);
+    }
 }

@@ -6,6 +6,8 @@ use Scandiweb\Services\CategoryService;
 use Scandiweb\Services\ProductService;
 use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Definition\ObjectType;
+use PDO;
+use PDOException;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Schema;
 use GraphQL\Type\SchemaConfig;
@@ -19,7 +21,7 @@ class GraphQL
     private CategoryService $categoryService;
     //    private CategoryService $category_service;
     public function __construct(
-	ProductService $productService,
+        ProductService $productService,
         CategoryService $categoryService) {
         $this->productService = $productService;
         $this->categoryService = $categoryService;
@@ -92,13 +94,13 @@ class GraphQL
                     "products" => [
                         "type" => Type::listOf($productType),
                         "args" => [
-                          "category" => ["type" => Type::string()],
+                            "category" => ["type" => Type::string()],
                         ],
                         "resolve" => function ($root, $args) {
                             // Interatable<Itertable>
-                            
+
                             $products = $this->productService->get_products($args["category"]);
-                            
+
                             $products_associative = [];
                             foreach($products as $product) {
                                 array_push($products_associative, $product->getFullJSON());
@@ -114,9 +116,9 @@ class GraphQL
                         "resolve" => function ($root, $args) {
                             // TODO: define the internal querying logic
                             return $this->productService
-                                ->get_product($args["id"])
-                                ->getFullJSON();
-                            
+                                        ->get_product($args["id"])
+                                        ->getFullJSON();
+
                         },
                     ],
 
@@ -127,17 +129,43 @@ class GraphQL
                         ],
                         "resolve" => function ($root, $args) {
                             return $this->categoryService
-                                ->getCategoryById($args["id"])
-                                ->getFullJSON();
+                                        ->getCategoryById($args["id"])
+                                        ->getFullJSON();
                         },
                     ],
                 ],
             ]);
-
+                $mutationType = new ObjectType([
+                    "name" => "Mutation",
+                    "fields" => [
+                        'InsertOrder' => [
+                            'type' => Type::boolean(),
+                            'args' => [
+                                'product_id' => ['type' => Type::id()],
+                                'name' => ['type' => Type::string()],
+                                'attributes' => ['type' => Type::string()],
+                                'quantity' => ['type' => Type::int()],
+                                'total_price' => ['type' => Type::int()],
+                                'date' => ['type' => Type::string()],
+                            ],
+                            'resolve' => function ($root, $args) {
+                                // Insert oreder logic:
+                            try{ 
+                                $values = "0,{$args['product_id']}, '{$args['name']}', '{$args['attributes']}', {$args['quantity']}, {$args['total_price']}, '{$args['date']}'";
+                                $code = $this->productService->insert_order($values);
+                                return $code;
+                            } catch (PDOException $e) {
+                                echo $e;
+                            } 
+                            },
+                        ]
+                    ]
+                ]);
             // See docs on schema options:
             // https://webonyx.github.io/graphql-php/schema-definition/#configuration-options
             $schema = new Schema(
-                (new SchemaConfig())->setQuery($queryType)
+                (new SchemaConfig())
+   ->setQuery($queryType)->setMutation($mutationType)
                 //                ->setMutation($mutationType)
             );
 

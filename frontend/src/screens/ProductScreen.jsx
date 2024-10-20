@@ -9,7 +9,9 @@ class ProductScreen extends React.Component {
         super(props);
         this.state = {
             mainImage: 0,
-            attributes: {}
+            attributes: {},
+            buyButtonState: false,
+            defaultAttributes: []
         }
     }
 
@@ -64,8 +66,8 @@ class ProductScreen extends React.Component {
                 <div key={attributeItem.id} className='flex'>
 
 
-                
-                
+
+
                 <div style={{backgroundColor: (isColor) && attributeItem.value}}
                 className={`
                     ${(isColor) && `w-[2.25rem] h-[2.25rem] ${(isActive) ? `border-solid border-emerald-400 border-s-8 ` : 'border-solid border-black'}`}  
@@ -83,9 +85,16 @@ class ProductScreen extends React.Component {
         if (this.state?.attributes?.[attribute.id] === selectedItem.value) {
 
             this.setState(prevState => {
+                let prevStateAttributes = Object.entries(prevState.attributes);
+                console.log("Full on prev state attrs: ", prevStateAttributes);
+
+                let prevAttributes = prevState.attributes;
+                delete prevAttributes[attribute.id];
+                prevStateAttributes.pop(attribute.id);
+
                 return {...prevState, attributes: {
-                    ...prevState.attributes,
-                    [attribute.id]: "",
+                    ...prevAttributes,
+                    
                 }
 
                 };
@@ -111,7 +120,7 @@ class ProductScreen extends React.Component {
     getImageList = (product) => {
         let result = [];
         for (let i = 0; i < product.gallery.length; i++) {
-           const pic = product.gallery[i];
+            const pic = product.gallery[i];
             result.push(<img onMouseOver={() => {this.changeFocusedImage(i)}} src={pic} className='mini-image' />)
         }
         return result;
@@ -130,24 +139,20 @@ class ProductScreen extends React.Component {
 
         return <span>Price unavailable</span>;
     }
+    componentDidUpdate() {
 
-    
+
+    }    
     render() {
         return (
             <Query query={this.GET_PRODUCT} variables={{id: this.props.router.params.id}}>
             { ({loading, error, data}) => {
-
-                if (loading) {
-                    return <p>Loading...</p>
-                }
-
-                if (error) {
-                    return <h1>Error {error.message}</h1>
-                }
-
-
                 if (data) {
                     const product = data.product;
+                    let confirmedValues = 0;
+                    
+                    console.log("OBJ.VALUES: ", Object.values(this.state.attributes).length)
+                    const buyState = Object.values(this.state.attributes).length === product.attributes.length;
                     const attributes = this.generateAttributes(product);
                     return <div className={"productscreen-container"}> 
                         <div className='images-container'  data-testid='product-gallery'   >
@@ -156,16 +161,16 @@ class ProductScreen extends React.Component {
                         </div>
                         <div className={"main-image-container flex flex-row"}>
 
-                        <button className='h-10 w-10 relative left-10 top-56 bg-[rgba(0,0,0,0.5)] border-transparent text-white font-extrabold'
+                        <button className='transition-all hover:bg-[rgba(0,0,0,.7)] h-10 w-10 relative left-10 top-56 bg-[rgba(0,0,0,0.5)] border-transparent text-white font-extrabold'
                     onClick={() => {this.changeFocusedImage(((this.state.mainImage - 1) !== -1) ? this.state.mainImage - 1 : this.state.mainImage)}}
                         >⇦</button>
-                        
-                             <img className='main-image' src={product.gallery[this.state.mainImage]} />
-                            
-                            
-                         
-                        <button className='h-10 w-10 relative right-10 top-56 bg-[rgba(0,0,0,0.5)] border-transparent text-white font-extrabold'
-                        onClick={() => {this.changeFocusedImage(((this.state.mainImage + 1) !== product.gallery.length) ? this.state.mainImage + 1 : this.state.mainImage)} }
+
+                        <img className='main-image' src={product.gallery[this.state.mainImage]} />
+
+
+
+                        <button className='   transition-all hover:bg-[rgba(0,0,0,.7)]   h-10 w-10 relative right-10 top-56 bg-[rgba(0,0,0,0.5)] border-transparent text-white font-extrabold'
+                    onClick={() => {this.changeFocusedImage(((this.state.mainImage + 1) !== product.gallery.length) ? this.state.mainImage + 1 : this.state.mainImage)} }
                         >⇨</button>
                         </div> 
                         </div>
@@ -176,8 +181,8 @@ class ProductScreen extends React.Component {
                         <h1 className='font-roboto font-bold font-normal mb-2'>PRICE:</h1>
                         {this.getPrice(product)}
 
-                        <button onClick={() => {this.props.cartRef.current.addProduct({...product, attributes: product.attributes, selectedAttributes: this.state.attributes})}
-                        }   data-testid='add-to-cart'  className='p-4 bg-green-400 border border-transparent text-white font-bold transition-all w-96 hover:bg-green-500 active:bg-green-600'>ADD TO CART</button>
+                        <button onClick={() => {(buyState) && this.props.cartRef.current.addProduct({...product, attributes: product.attributes, selectedAttributes: this.state.attributes})}
+                        }   data-testid={`add-to-cart`}  className={`p-4 ${(buyState) ? 'bg-green-400 hover:bg-green-500 active:bg-green-600' : 'bg-gray-400 hover:bg-gray-500 active:bg-gray-600'} border border-transparent text-white font-bold transition-all w-96 `}>ADD TO CART</button>
 
                         {parse(product.description.replace("<p>", "<p data-testid='product-description'   className=' font-roboto text-scandiweb-black '>"))}
                         </div>

@@ -145,7 +145,7 @@ class GraphQL
                                 'name' => ['type' => Type::string()],
                                 'attributes' => ['type' => Type::string()],
                                 'quantity' => ['type' => Type::int()],
-                                'total_price' => ['type' => Type::int()],
+                                'total_price' => ['type' => Type::float()],
                                 'date' => ['type' => Type::string()],
                             ],
                             'resolve' => function ($root, $args) {

@@ -12,7 +12,8 @@ class DBQueryBuilder {
         $this->database = $database;
 }
 public function select_all($table, $category): array {
-    $sql = "SELECT * FROM {$table}" . (!is_null($category) ? " WHERE category='{$category}'" : "");
+$sql = "SELECT * FROM {$table}" . 
+    ((!is_null($category) && $category !== "all") ? " WHERE category='{$category}'" : "");
 
     $statement = $this->database->get_db()->prepare($sql);
     $statement->execute();

@@ -45,10 +45,10 @@ export default class Product extends React.Component {
     render() {
         return <div   data-testid={`product-${this.toKebabCase(this.state.name)}`} onClick={this.productRoute} 
         className="  pb-[5px] items-center self-center justify-center  transition-all duration-[350ms] ease-in
-            hover:transition-all hover:drop-shadow-md group 
+            hover:transition-all hover:drop-shadow-xl group 
             w-[18rem] h-[23rem] flex flex-col hover:bg-white hover:shadow-white">
             <Link to={`/product/${this.state.id}`} className="product-link">
-            <img className="w-64 max-h-64 " src={this.state.gallery[0]}></img>
+            <img className="w-64 max-h-64 rounded-2xl" src={this.state.gallery[0]}></img>
             <div className="product-meta">
             <p className="product-name font-roboto font-normal">{this.state.name}</p>
             <p className="product-price font-raleway font-extrabold">{this.state.currency.symbol}{this.state.price.amount}</p>

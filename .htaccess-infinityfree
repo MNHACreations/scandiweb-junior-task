@@ -1,0 +1,18 @@
+RewriteEngine On
+RewriteBase /
+
+# Don't rewrite requests for the index.php file itself
+RewriteCond %{REQUEST_URI} !^/Scandiweb/public/index\.php$
+
+# If the requested file does not exist
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# If the requested directory does not exist
+RewriteCond %{REQUEST_FILENAME} !-d
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
+# Redirect all other requests to the root index.php
+RewriteRule ^.*$ /public/index.php [L]

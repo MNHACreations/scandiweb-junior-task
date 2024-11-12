@@ -63,17 +63,18 @@ class ProductScreen extends React.Component {
             const isColor = attribute.name === "Color" || attributeItem.value[0] === '#';
             const color = attributeItem.value;
             result.push(
-                <div key={attributeItem.id} className='flex'>
+                <div key={attributeItem.id} className='flex' >
 
 
 
 
                 <div style={{backgroundColor: (isColor) && attributeItem.value}}
-                className={`
-                    ${(isColor) && `w-[2.25rem] h-[2.25rem] ${(isActive) ? `border-solid border-emerald-400 border-s-8 ` : 'border-solid border-black'}`}  
+
+                className={`${(isColor) && `w-[2.25rem] h-[2.25rem] ${(isActive) ? `border-solid border-emerald-400 border-s-8 ` : 'border-solid border-black'}`}  
                     border-[2px] mx-2 font-roboto transition-all font-bold rounded-sm border-solid border-gray-700  p-2 
                     ${(isActive) && 'bg-black text-white'}`} 
                 onClick={ () => {this.setSelectedAttribute(attribute, attributeItem)} }  
+                data-testid={`product-attribute-${attribute.name.toLowerCase()}-${attributeItem.value}`}
                 > {(!isColor) && attributeItem.value} </div>
                 </div> );
 
@@ -94,7 +95,7 @@ class ProductScreen extends React.Component {
 
                 return {...prevState, attributes: {
                     ...prevAttributes,
-                    
+
                 }
 
                 };
@@ -139,10 +140,18 @@ class ProductScreen extends React.Component {
 
         return <span>Price unavailable</span>;
     }
-    componentDidUpdate() {
 
+    getProductDescription = (product) => {
+        let descriptionElement;
+        const productDescription = product.description;
 
-    }    
+        if (productDescription[0] === '<') {
+            return  parse(product.description.replace("<p>", "<p data-testid='product-description' className=' font-roboto  mt-3 text-scandiweb-black '>"));
+        } else {
+            return parse("<p data-testid='product-description' className='font-roboto mt-3 text-scandiweb-black'>{description}</p>".replace("{description}", productDescription));
+        }
+
+    };
     render() {
         return (
             <Query query={this.GET_PRODUCT} variables={{id: this.props.router.params.id}}>
@@ -150,9 +159,10 @@ class ProductScreen extends React.Component {
                 if (data) {
                     const product = data.product;
                     let confirmedValues = 0;
-                    
+
                     console.log("OBJ.VALUES: ", Object.values(this.state.attributes).length)
-                    const buyState = Object.values(this.state.attributes).length === product.attributes.length;
+                    const buyState = product.instock && Object.values(this.state.attributes).length === product.attributes.length;
+                    
                     const attributes = this.generateAttributes(product);
                     return <div className={"productscreen-container"}> 
                         <div className='images-container'  data-testid='product-gallery'   >
@@ -182,9 +192,9 @@ class ProductScreen extends React.Component {
                         {this.getPrice(product)}
 
                         <button onClick={() => {(buyState) && this.props.cartRef.current.addProduct({...product, attributes: product.attributes, selectedAttributes: this.state.attributes})}
-                        }   data-testid={`add-to-cart`}  className={`p-4 ${(buyState) ? 'bg-green-400 hover:bg-green-500 active:bg-green-600' : 'bg-gray-400 hover:bg-gray-500 active:bg-gray-600'} border border-transparent text-white font-bold transition-all w-96 `}>ADD TO CART</button>
+                        }   data-testid={`add-to-cart`} disabled={!buyState}  className={`p-4 ${(!product.instock) ? 'bg-red-400 hover:bg-red-500 active:bg-red-600' :  (buyState) ? 'bg-green-400 hover:bg-green-500 active:bg-green-600' : 'bg-gray-400 hover:bg-gray-500 active:bg-gray-600'} border border-transparent text-white font-bold transition-all w-96 `}>{!product.instock ? "OUT OF STOCK" : "ADD TO CART"}</button>
 
-                        {parse(product.description.replace("<p>", "<p data-testid='product-description'   className=' font-roboto text-scandiweb-black '>"))}
+                        {this.getProductDescription(product)}
                         </div>
                         </div>
                 }

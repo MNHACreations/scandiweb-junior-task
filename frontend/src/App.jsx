@@ -2,7 +2,7 @@ import ProductScreen from './screens/ProductScreen.jsx'
 import React from "react";
 import "./App.css";
 import NavBar from './components/NavBar.jsx'
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import MainLayout from './layouts/MainLayout.jsx'
 import { gql } from '@apollo/client'
 import { Query } from "@apollo/client/react/components";
@@ -74,8 +74,11 @@ export default class App extends React.Component {
 
                             <Routes>
                                 {/*Define static routes, followed by dynamic ones.*/}
+                                
                                 <Route path={`/product/:id`} element={<ProductScreen cartRef={this.cartRef} />} />
-                                <Route key={firstCategory} index element={<Products category={firstCategory} onProductAdd={this.handleAddProduct} />} />
+                                
+                                <Route path={'/all'} element={<Products category={"all"} onProductAdd={this.handleAddProduct}/>} /> 
+                                <Route key={firstCategory} index element={<Navigate to={'/all'} />} />
                                 return {uniqueCategories.map(category => <Route key={category} path={`/${category}`}
                                     element={<Products category={category} onProductAdd={this.handleAddProduct} />}
                                     shouldRevalidate={true}

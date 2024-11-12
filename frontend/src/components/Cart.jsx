@@ -159,10 +159,20 @@ class Cart extends React.Component {
             );
         });
     };
+    
+    componentDidUpdate(prevProps, prevState)  {
+        if (prevState.cartItems !== this.state.cartItems) {
+            localStorage.setItem("cartItems", JSON.stringify(this.state.cartItems));
+            console.log("Cart items have changed, saving to localstorage!");
+        }
+        const { cartMenuState } = this.state;
+        if (cartMenuState) {
+            document.body.style.overflow = "hidden";
+        } else {
+                document.body.style.overflow = "scroll";
+        }
 
-    componentDidUpdate()  {
-        localStorage.setItem("cartItems", JSON.stringify(this.state.cartItems));
-        console.log("SAVING")
+        
     };
     getTotalPrice = () => {
         // TODO: Handle this in a better way
@@ -184,11 +194,11 @@ class Cart extends React.Component {
                 {(client) => (
                     <div
                     onClick={() => this.setState({ cartMenuState: false })}
-                    className="transition-all fixed top-[4.6rem] left-0 w-full h-screen z-10"
+                    className="transition-all ease-in-out fixed top-[4.6rem] left-0 w-full h-screen z-10 backdrop-blur-lg"
                     style={{ backgroundColor: '#00000080' }}
                     >
-                    <div
-                    className="w-80 bg-white absolute top-0 right-2 z-20 font-sans border-4 border-gray-600 text-xs p-5"
+                    <div  data-testid='cart-overlay'
+                    className=" transition-all w-80 bg-white absolute top-0 right-2 z-20 font-sans border border-gray-600 text-xs p-5 ease-in-out"
                     onClick={(event) => event.stopPropagation()}
                     >
                     <div className="flex text-xs font-sans">

@@ -6,7 +6,6 @@ body {
 
 #navbar {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-
 /* flex space-between center boxshadow padding */
 }
 
@@ -47,26 +46,24 @@ body {
 
 .navitem, .active-navitem {
     margin-top: 200px;
-    color: rgba(0, 0, 0, .5);
     font-style: bold;
     text-decoration: none;
     font-family: Arial;
     margin-left: 35px;
     padding: 10px;
-    padding-left: 20px;
+    padding-left: 25px;
     padding-right: 25px;
-    transition: .3s ease-in;
 }
 
 .active-navitem {
     color: rgba(0, 255, 0, .9);
-    font-weight: bold;
+    /* font-weight: bold; */
     border-bottom: 3px solid rgba(0, 255, 0, 0.5);
 }
 
 .navitem:hover {
     color: black;
-    border-bottom: 2px solid rgba(0, 255, 0, 0.1);
+    border-bottom: 3px solid rgba(0, 255, 0, 0.1);
 }
 
 .products-container {

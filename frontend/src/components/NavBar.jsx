@@ -29,7 +29,7 @@ export default class NavBar extends React.Component{
             <NavLink 
             key={category} 
             to={`/${category}`}
-            className={({ isActive }) => isActive ? 'active-navitem' : 'navitem'}
+            className={({ isActive }) => isActive ? 'active-navitem' : 'navitem text-gray-800'}
             data-testid={category === window.location.pathname.slice(1) ? "active-category-link" : "category-link"}
             >
             {category.toUpperCase()}
@@ -59,18 +59,25 @@ export default class NavBar extends React.Component{
                     return <p>Error {error.graphQLErrors[0].message}</p>
                 }
                 if (data) {
-                    return <div id="navbar" className='z-40 flex justify-between items-center p-1.5'>
+                    return <header id="navbar" className='z-40 flex justify-between items-center p-1.5 shadow drop-shadow-md'>
                         <div className="navbar-content">
+            <NavLink
+            key={'all'}
+            exact to={`/all`}
+            className={({ isActive }) => isActive ? 'active-navitem' : 'navitem'}
+            data-testid={'all' === window.location.pathname.slice(1) ? "active-category-link" : "category-link"}
+            >
+            All
+            </NavLink>
                         {this.getUniqueCategories(data)}
-
-
+                        
 
                         </div>
                         <div  data-testid='cart-btn' className='navbar-cart-container' onClick={() => {this.props.cartRef.current.toggleCart()}}>
                         <img src={cartLogo} id="navbar-cart-logo" />
                         <span style={{display: (this.state.cartSize < 1) ? "none" : "inline"}} className="navbar-cart-size">{this.state.cartSize}</span>
                         </div>
-                        </div>
+                        </header>
 
 
                 }

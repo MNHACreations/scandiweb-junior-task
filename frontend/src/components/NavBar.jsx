@@ -64,7 +64,7 @@ export default class NavBar extends React.Component{
             <NavLink
             key={'all'}
             exact to={`/all`}
-            className={({ isActive }) => isActive ? 'active-navitem' : 'navitem'}
+            className={({ isActive }) => isActive ? 'active-navitem' : 'navitem text-gray-800'}
             data-testid={'all' === window.location.pathname.slice(1) ? "active-category-link" : "category-link"}
             >
             All

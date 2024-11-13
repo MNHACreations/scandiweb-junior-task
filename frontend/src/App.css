@@ -4,6 +4,20 @@ body {
     font-family:Helvetica, Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
+.skeleton {
+    animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+    
+    0% {
+        background-color: hsl(200, 20%, 70%);
+    }
+
+    100% {
+        background-color: hsl(200, 20%, 95%);
+    }
+}
 #navbar {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 /* flex space-between center boxshadow padding */
